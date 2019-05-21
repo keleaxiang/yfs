@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Http\Requests\WerRequest;
+use App\Model\Admin\User;
+use Hash;
 class UserController extends Controller
 {
     /**
@@ -13,9 +15,50 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+         //获取传过来的数据
+       /* $um = $_GET['num'];
+        $se = $_GET['search'];
+
+        // dd($um, $se);
+        dump($um, $se);*/
+
+        // $num = $request->num;
+
+        // $search = $request->search;
+
+        //获取数据
+        //单个条件的搜索
+        // $rs = User::where('username','like','%'.$search.'%')->paginate($request->input('num',10));
+
+        //多个条件的搜索
+        $rs = User::orderBy('id','asc')
+
+            ->where(function($query) use($request){
+                //检测关键字
+                $username = $request->input('username');
+                $email = $request->input('email');
+                //如果用户名不为空
+                if(!empty($username)) {
+                    $query->where('username','like','%'.$username.'%');
+                }
+                //如果邮箱不为空
+                if(!empty($email)) {
+                    $query->where('email','like','%'.$email.'%');
+                }
+            })
+            ->paginate($request->input('num', 10));
+
+
+        //显示一个列表页
+        return view('admin.user.list',[
+            'title'=>'用户的列表页面',
+            'rs'=>$rs,
+            'request'=>$request
+
+        ]);
+
     }
 
     /**
@@ -60,15 +103,15 @@ class UserController extends Controller
         //     'phone.regex'=>'手机号码格式不正确',
         // ]);
 
-
+            // $rs = $request->all();
+            // dump($rs);
         //获取表单传过来的信息 返回的数据是一个数组
-        $rs = $request->except('_token','repass','profile');
-
+        $rs = $request->except('_token','repass','head');
         //处理图片上传
-        if($request->hasFile('profile')){
+        if($request->hasFile('head')){
 
             //获取图片上传的信息
-            $file = $request->file('profile');
+            $file = $request->file('head');
 
             //名字
             $name = 'img_'.rand(1111,9999).time();
@@ -78,7 +121,7 @@ class UserController extends Controller
 
             $file->move('./uploads',$name.'.'.$suffix);
 
-            $rs['profile'] = '/uploads/'.$name.'.'.$suffix;
+            $rs['head'] = '/uploads/'.$name.'.'.$suffix;
 
         }
 
@@ -87,7 +130,7 @@ class UserController extends Controller
 
        //存放数据库里面
         $data = User::create($rs);
-
+        // dump($data);
         if($data){
 
             return redirect('admin/user');

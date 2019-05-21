@@ -5,20 +5,19 @@
         <title>@yield('title')</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-        
         <!-- jQuery AND jQueryUI -->
-        <script type="text/javascript" src="/admin/js/libs/jquery/1.6/jquery.min.js"></script>
-        <script type="text/javascript" src="/admin/js/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
-        
-        <link rel="stylesheet" href="/admin/css/min.css" />
-        <script type="text/javascript" src="/admin/js/min.js"></script>
-        
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/admin/js/libs/jquery/1.6/jquery.min.js"></script>
+<script type="text/javascript" src="/admin/js/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>      
+ <link rel="stylesheet" href="/admin/css/min.css" />
+ <script type="text/javascript" src="/admin/js/min.js"></script>
+ <script type="text/javascript" src="/admin/content/settings/main.js"></script>
+ <link rel="stylesheet" href="/admin/content/settings/style.css" />        
     </head>
-    <body>
-        
-        <script type="text/javascript" src="/admin/content/settings/main.js"></script>
-        <link rel="stylesheet" href="/admin/content/settings/style.css" />
-
+    <body>       
+             @php
+                $us = DB::table('admin')->where('id',session('uid'))->first();
+             @endphp
   <div class="settings" id="settings">
         <div class="wrapper">
             <div class="grid3">
@@ -48,20 +47,17 @@
             </div>
             <div class="clear"></div>
         </div>
-        <a class="settingbutton" href="#">
-
-        </a>
     </div>        
         <!--              
                 HEAD
                         --> 
         <div id="head">
             <div class="left">
-                <a href="#" class="button profile"><img src="/admin/img/icons/top/huser.png" alt="" /></a>
-                Hi, 
-                <a href="#">修改密码</a>
+                <a href="/admin/profile" class="button profile"><img src="{{$us->head}}" alt="" style="width:100%"/></a>
+                Hello,{{$us->username}}
+                <a href="/admin/pass">修改密码</a>
                 |
-                <a href="#">退出</a>
+                <a href="/admin/logout">退出</a>
             </div>
             <div class="right">
                 <form action="#" id="search" class="search placeholder">
@@ -80,9 +76,8 @@
               
                 <li><a href="#"><img src="/admin/img/icons/menu/brush.png" alt="" /> 管理员管理</a>
                     <ul>
-                        <li><a href="/admin/user/create">添加用户</a></li>
-                        <li><a href="/admin/user">浏览用户</a></li>
-                       
+                        <li><a href="/list/create">添加用户</a></li>
+                        <li><a href="/list">浏览用户</a></li>
                     </ul>
                 </li>
               
@@ -98,7 +93,10 @@
                  
             @show
             <div class="cb"></div>
-           
+           @section('js')
+
+
+          @show
         </div>
           
        
