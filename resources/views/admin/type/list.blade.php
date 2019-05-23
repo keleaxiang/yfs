@@ -20,21 +20,18 @@
                 <tr>
                     <th><input type="checkbox" class="checkall"></th>
                     <th>ID</th>
-                    <th>用户名</th>
-                    <th>邮箱</th>
-                    <th>手机号</th>
-                    <th>头像</th>
+                    <th>分类名</th>
+                    <th>父级id</th>
+                    <th>路径</th>
                     <th>状态</th>
                     <th>操作</th>
                 </tr>
             </thead>
-            <form action="/admin/user" method='get'>
-            <div class="dataTables_filter" id="DataTables_Table_1_filter" style="margin-left:500px">
+            <form action="/admin/type" method='get'>
+            <div class="dataTables_filter" id="DataTables_Table_1_filter" style="float:right;">
                     <label>
-                        邮箱:
-                        <input type="text" name='email' aria-controls="DataTables_Table_1" >
                         用户名:
-                        <input type="text" name='username' aria-controls="DataTables_Table_1" >
+                        <input type="text" name='tname' aria-controls="DataTables_Table_1">
                         <button class='btn btn-info'>搜索</button>
                     </label>
                 </div>
@@ -44,10 +41,9 @@
                  <tr>
                     <td><input type="checkbox"></td>
                     <td>{{$v->id}}</td>
-                    <td>{{$v->username}}</td>
-                    <td>{{$v->email}}</td>
-                    <td>{{$v->phone}}</td>
-                    <td><img src="{{$v->head}}" style='width:50px'></td>
+                    <td>{{$v->tname}}</td>
+                    <td>{{$v->pid}}</td>
+                    <td>{{$v->path}}</td>
                     <td>
                           
                             @if($v->status == 1)
@@ -58,8 +54,8 @@
                          
                       <!-- {{$v->status ? '开启' : '禁用'}} -->
                     </td>
-                    <td class="actions"><a href="/admin/user/{{$v->id}}/edit" title="Edit this content">修改</a>
-                        <form action="/admin/user/{{$v->id}}" method='post' style='display: inline'>
+                    <td class="actions"><a href="/admin/type/{{$v->tid}}/edit" title="Edit this content">修改</a>
+                        <form action="/admin/type/{{$v->tid}}" method='post' style='display: inline'>
                                 {{csrf_field()}}
                                 {{method_field('DELETE')}}
                                 <button class='btn btn-danger'>删除</button>

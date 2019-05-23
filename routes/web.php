@@ -34,6 +34,9 @@ Route::group([],function(){
 	
 	//退出
 	Route::get('admin/logout','Admin\LoginController@logout');
+
+	//分类的管理
+	Route::resource('/admin/type','Admin\TypeController');
 });
 //后台用户列表
 Route::resource('/list','Admin\UserController');

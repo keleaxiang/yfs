@@ -161,7 +161,13 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        //根据id获取数据
+        $rs = User::find($id);
+        //显示页面
+        return view('admin.user.edit',[
+            'title'=>'用户的修改页面',
+            'rs'=>$rs
+        ]);
     }
 
     /**
@@ -173,7 +179,45 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //表单验证
+
+        //删除头像
+        //通过id获取头像的路径数据
+
+        //通过unlink('.'.路径)删除
+
+
+        //获取数据
+        $rs = $request->except('_token','_method');
+
+        //处理头像
+        if($request->hasFile('head')){
+
+            //获取图片上传的信息
+            $file = $request->file('head');
+
+            //名字
+            $name = 'img_'.rand(1111,9999).time();
+
+            //获取后缀
+            $suffix = $file->getClientOriginalExtension();
+
+            $file->move('./uploads',$name.'.'.$suffix);
+
+            $rs['head'] = '/uploads/'.$name.'.'.$suffix;
+
+        }
+
+        //修改数据
+        $data = User::where('id',$id)->update($rs);
+
+        if($data){
+
+            return redirect('/admin/user')->with('success','修改成功');
+        } else {
+
+            return back()->with('error','修改失败');
+        }
     }
 
     /**
@@ -184,6 +228,20 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //根据id获取路径信息
+
+        //unlink()    返回的boolean
+
+        //根据id删除数据
+        $data = User::destroy($id);
+
+        if($data){
+
+            return redirect('/admin/user')->with('success','删除成功');
+        } else {
+
+            return back()->with('error','删除失败');
+
+        }
     }
 }
